@@ -27,6 +27,7 @@ pub struct Identicon {
     size: u32,
     scale: u32,
     background_color: (u8, u8, u8),
+    color: Option<(u8, u8, u8)>,
     mirrored: bool,
 }
 
@@ -145,6 +146,19 @@ impl Identicon {
         self
     }
 
+    /// Gets the identicon color.
+    pub fn color(&self) -> Option<(u8, u8, u8)> {
+        self.color
+    }
+
+    /// Sets the active color of the identicon.
+    ///
+    /// This is a tuble of (red, green, blue) values.
+    pub fn set_color(&mut self, color: (u8, u8, u8)) -> &mut Self {
+        self.color = Some(color);
+        self
+    }
+
     /// Gets if the identicon is mirrored.
     pub fn mirrored(&self) -> bool {
         self.mirrored
@@ -171,7 +185,7 @@ impl Identicon {
         let grid = grid::generate_full_grid(self.size, &self.hash);
 
         // Create pixel objects
-        let color_active = color::generate_color(&self.hash);
+        let color_active = self.color().unwrap_or(color::generate_color(&self.hash));
         let pixel_active = image::Rgb([color_active.0, color_active.1, color_active.2]);
         let pixel_background = image::Rgb([
             self.background_color.0,
@@ -276,6 +290,7 @@ impl Default for Identicon {
                 default_background_color,
                 default_background_color,
             ),
+            color: None,
             mirrored: true,
         }
     }

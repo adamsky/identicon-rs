@@ -12,6 +12,7 @@ fn main() -> Result<(), IdenticonError> {
     // Chained example with no border
     Identicon::new(test_string)
         .set_border(0)
+        .set_color((68, 153, 58))
         .save_image("output_2.png")?;
     Ok(())
 }
